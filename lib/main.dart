@@ -19,81 +19,45 @@ class StateFulCalc extends StatefulWidget{
   CalcButtons createState() => CalcButtons();
 }
 class CalcButtons extends State<StateFulCalc>{
-
+List<String> buttonsIcons = ["÷",".", "=", "C", "⌫", "+", "-", "*", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'calc application',
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
+      return Scaffold(
         appBar: AppBar(
           title: const Text("calculator"),
         ),
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.center ,
-          children: [
-            Row(
-              children: [
-                FloatingActionButton(
-                  onPressed: (){},
-                  tooltip: "C",
-                  child: Text("C"),
-                  ),
-                  FloatingActionButton(
-                  onPressed: (){},
-                  tooltip: "/",
-                  child: Text("/"),
-                  
-                  ),
-                  FloatingActionButton(
-                  onPressed: (){},
-                  tooltip: "+",
-                  child: Text("+"),
-                  ),
-              ],
-            ),
-              Row(
-                children: [
-                  FloatingActionButton(
-                  onPressed: (){},
-                  tooltip: "-",
-                  child: Text("-"),
-                  ),
-                  FloatingActionButton(
-                  onPressed: (){},
-                  tooltip: "*",
-                  child: Text("*"),
-                  ),
-                  FloatingActionButton(
-                  onPressed: (){},
-                  tooltip: "⌫",
-                  child: Text("C"),
-                  ),
-                ],
-              ),
-          GridView.builder(
-            
+        body: Center(
+          child: SizedBox(
+            width: 100,
+            height: 200,
+            child: GridView.builder(
+            itemCount: buttonsIcons.length,
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 3,
               ),
               itemBuilder: (
                 BuildContext context,int index){
                   return GridTile(
-                    child: FloatingActionButton(
+                  child: FloatingActionButton(
                   onPressed: (){},
-                  tooltip: '$index',
+                  tooltip: '${buttonsIcons[index]}',
+                  child: Text('${buttonsIcons[index]}')
                   ),
                   );
                 }
                 )
+          )
+        ),
+          );
+          
+          
                 
 
-          ]
-          )
-          
-          )
           
           
-        );
+          
+          
+          
+        
       
     
   }
