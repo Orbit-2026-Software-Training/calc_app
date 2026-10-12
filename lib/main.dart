@@ -19,7 +19,7 @@ class StateFulCalc extends StatefulWidget{
   CalcButtons createState() => CalcButtons();
 }
 class CalcButtons extends State<StateFulCalc>{
-List<String> buttonsIcons = ["÷", "-", "*", "+", "⌫", "=", "C", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
+List<String> buttonsIcons = ["÷", "-", "*", "+", "⌫", "=", "C",".", "0","1", "2", "3", "4", "5", "6", "7", "8", "9"];
 List<String>numbers=[];
 List<num>intNumbers=[];
 List<String>operations=[];
@@ -27,6 +27,10 @@ String stringNum="";
 num result=0;
 List<String>history=[];
 List<num>results=[];
+List<String>dataHistory=[];
+String historyData ="";
+String calcWay = "";
+List<String>result1=[];
 void onButtonPressed(int whichButton){
   setState(() {
   if(whichButton>=7){
@@ -35,9 +39,11 @@ void onButtonPressed(int whichButton){
   }
   if(whichButton<=3){
     numbers.add(buttonsIcons[whichButton]);
-    intNumbers.add(int.parse(stringNum));
-    stringNum="";
+    intNumbers.add(num.parse(stringNum));
     operations.add(buttonsIcons[whichButton]);
+    dataHistory.add(stringNum);
+    stringNum="";
+    dataHistory.add(buttonsIcons[whichButton]);
   }
   if(whichButton==4){
     numbers.removeLast();
@@ -51,6 +57,8 @@ void onButtonPressed(int whichButton){
   if(whichButton==5){
     operations.add("=");
     intNumbers.add(int.parse(stringNum));
+    dataHistory.add(stringNum);
+
     if(operations.contains("÷")||operations.contains("*")){
       for(int i=0;i<operations.length;i++){
         if(operations[i]=="÷"){
@@ -89,29 +97,71 @@ void onButtonPressed(int whichButton){
           i--;
         }
     }
+    historyData=dataHistory.join();
+    dataHistory.clear();
+    dataHistory.add(
+      historyData
+    );
+    historyData="";
     numbers.clear();
-    history.clear();
-    history.add(results.toString());
     numbers.add(results.last.toString());
+    result1.add(results.last.toString());
+    if(result1[0]=="Infinity"){
+      result1=["error"];
+      history.add(result1.toString());
+    }
+    else{
+      history.add(result1.toString());
+    }
+    
   }
   });
 
 }
+void historyDelete(){
+  setState(() {
+    history.clear();
+  });
+  
+}
   Widget build(BuildContext context) {
       return Scaffold(
+        drawer: Drawer(
+          child: Column(
+          children: [
+            Flexible(
+              child: ListView.builder(
+            itemCount: history.length,
+            itemBuilder: (BuildContext context,int index){
+              return ListTile(
+                title: Text(dataHistory[index]+"="+history[index]),
+                
+              );
+            }
+              ),
+            ),
+            FloatingActionButton(
+            onPressed: historyDelete,
+            backgroundColor: Colors.blueGrey,
+            child: Icon(Icons.delete),
+            ),
+            ]
+          ),
+        ),
+       
+            
+        
         appBar: AppBar(
           title: const Text("calculator"),
         ),
-        body: Column(
+        body: Center(
+        child: Column(
           children:[
             Container(
-              decoration: BoxDecoration(
-                color: Colors.grey,
-              ),
               child: Text(
                 numbers.join(),
                 style: TextStyle(fontSize: 30,
-                color: Colors.white,
+                color: Colors.black,
                 )
               ),
             ),
@@ -127,62 +177,20 @@ void onButtonPressed(int whichButton){
                 BuildContext context,int index){
                   return GridTile(
                   child: FloatingActionButton(
-                  onPressed: (){
-                    
-                      onButtonPressed(index);
-                      
-                    
+                  onPressed: (){  
+                      onButtonPressed(index); 
                   },
                   tooltip: '${buttonsIcons[index]}',
                   child: Text('${buttonsIcons[index]}')
                   ),
                   );
                 }
-                ),
-                
-                
+                ),    
         ),
-        Container(
-              decoration: BoxDecoration(
-                color: Colors.grey,
-              ),
-              child:Column(
-                children: [
-                  Text(
-                    "history",
-                    style: TextStyle(fontSize: 30,
-                    color: Colors.white,
-                    )
-                  ),
-                
-               Text(
-                history.join(),
-                style: TextStyle(fontSize: 30,
-                color: Colors.white,
-                )
-              ),
-              ],
-            ),
-        )
           ]
-          
-        
         )
-      );
-          
-      
-          
-          
-                
-
-          
-          
-          
-          
-          
-        
-      
-    
+        )     
+      );   
   }
 }
 
