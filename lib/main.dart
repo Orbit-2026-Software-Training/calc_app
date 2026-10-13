@@ -39,6 +39,7 @@ void onButtonPressed(int whichButton){
   }
   if(whichButton<=3){
     numbers.add(buttonsIcons[whichButton]);
+    
     intNumbers.add(num.parse(stringNum));
     operations.add(buttonsIcons[whichButton]);
     dataHistory.add(stringNum);
@@ -55,10 +56,17 @@ void onButtonPressed(int whichButton){
     stringNum="";
   }
   if(whichButton==5){
+    if(operations.last!="="){
     operations.add("=");
-    intNumbers.add(int.parse(stringNum));
-    dataHistory.add(stringNum);
 
+    intNumbers.add(int.parse(stringNum));
+    
+    if(numbers[0]==buttonsIcons[1]){
+      intNumbers[0]=intNumbers[0]*-1;
+      stringNum="-"+stringNum;
+    }
+    dataHistory.add(stringNum);
+    
     if(operations.contains("÷")||operations.contains("*")){
       for(int i=0;i<operations.length;i++){
         if(operations[i]=="÷"){
@@ -117,6 +125,7 @@ void onButtonPressed(int whichButton){
     dataHistory.clear();
     history.clear();
   }
+  }
   });
 
 }
@@ -173,7 +182,7 @@ void historyDelete(){
             child: GridView.builder(
             itemCount: buttonsIcons.length,
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 6,
+              crossAxisCount: 5,
               ),
               itemBuilder: (
                 BuildContext context,int index){
@@ -182,6 +191,9 @@ void historyDelete(){
                   onPressed: (){  
                       onButtonPressed(index); 
                   },
+                  shape: CircleBorder(),
+                    
+                  
                   tooltip: '${buttonsIcons[index]}',
                   child: Text('${buttonsIcons[index]}')
                   ),
