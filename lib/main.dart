@@ -105,22 +105,24 @@ void onButtonPressed(int whichButton){
     historyData="";
     numbers.clear();
     numbers.add(results.last.toString());
-    result1.add(results.last.toString());
-    if(result1[0]=="Infinity"){
-      result1=["error"];
-      history.add(result1.toString());
+
+    if(numbers[0]=="Infinity"){
+      numbers=["error"];
+      history.add(numbers.toString());
     }
     else{
-      history.add(result1.toString());
+      history.add(numbers.toString());
     }
-    
+    result1.add(dataHistory[0]+"="+history[0]);
+    dataHistory.clear();
+    history.clear();
   }
   });
 
 }
 void historyDelete(){
   setState(() {
-    history.clear();
+    result1.clear();
   });
   
 }
@@ -131,10 +133,10 @@ void historyDelete(){
           children: [
             Flexible(
               child: ListView.builder(
-            itemCount: history.length,
+            itemCount: result1.length,
             itemBuilder: (BuildContext context,int index){
               return ListTile(
-                title: Text(dataHistory[index]+"="+history[index]),
+                title: Text(result1[index]),
                 
               );
             }
