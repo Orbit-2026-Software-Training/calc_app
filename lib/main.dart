@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
 
 void main() {
@@ -18,6 +20,8 @@ class StateLessCalc extends StatelessWidget {
 }
 
 class StateFulCalc extends StatefulWidget {
+  const StateFulCalc({super.key});
+
   @override
   CalcButtons createState() => CalcButtons();
 }
@@ -66,7 +70,7 @@ class CalcButtons extends State<StateFulCalc> {
         intNumbers.add(num.parse(stringNum));
         if (numbers[0] == buttonsIcons[1]) {
           intNumbers[0] = intNumbers[0] * -1;
-          stringNum = "-" + stringNum;
+          stringNum = "-$stringNum";
         }
         operations.add(buttonsIcons[whichButton]);
         dataHistory.add(stringNum);
@@ -74,7 +78,25 @@ class CalcButtons extends State<StateFulCalc> {
         dataHistory.add(buttonsIcons[whichButton]);
       }
       if (whichButton == 4) {
-        numbers.removeLast();
+        print(numbers);
+        
+        if(numbers.length<=1){
+          numbers.clear();
+          intNumbers.clear();
+          operations.clear();
+          stringNum = "";
+        }
+        for(int i=0; i<9;i++){
+          if (numbers.last==i.toString()){
+            print("x");
+            numbers.removeLast();
+            intNumbers.removeLast();
+            stringNum="";
+            
+            
+      }
+      }
+
       }
       if (whichButton == 6) {
         numbers.clear();
@@ -83,7 +105,8 @@ class CalcButtons extends State<StateFulCalc> {
         stringNum = "";
       }
       if (whichButton == 5) {
-        intNumbers.add(int.parse(stringNum));
+        historyData = numbers.join();
+        intNumbers.add(num.parse(stringNum));
         dataHistory.add(stringNum);
         if (operations.contains("÷") || operations.contains("*")) {
           for (int i = 0; i < operations.length; i++) {
@@ -104,6 +127,7 @@ class CalcButtons extends State<StateFulCalc> {
               i--;
             }
           }
+
         }
         for (int i = 0; i < operations.length; i++) {
           if (operations[i] == "+") {
@@ -123,22 +147,26 @@ class CalcButtons extends State<StateFulCalc> {
             i--;
           }
         }
-        historyData = numbers.join();
+
         numbers.clear();
         numbers.add(results.last.toString());
         if (numbers[0] == "Infinity") {
           numbers = ["error"];
-          history.add(numbers.toString());
+          history.add(numbers.join());
         } else {
-          history.add(numbers.toString());
+          history.add(numbers.join());
         }
-        result1.add(historyData + "=" + history[0]);
+        result1.add("$historyData=${history[0]}");
         dataHistory.clear();
-        history.clear();
-        results.clear();
+
+        
         intNumbers.clear();
         operations.clear();
+        stringNum =history[0];
+        history.clear();
+      
       }
+
     });
   }
 
@@ -148,6 +176,7 @@ class CalcButtons extends State<StateFulCalc> {
     });
   }
 
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
@@ -179,7 +208,8 @@ class CalcButtons extends State<StateFulCalc> {
       body: Center(
         child: Column(
           children: [
-            Container(
+            Padding(
+              padding: EdgeInsetsGeometry.fromLTRB(0, 20, 0, 50),
               child: Text(
                 numbers.join(),
                 textDirection: TextDirection.ltr,
@@ -188,7 +218,7 @@ class CalcButtons extends State<StateFulCalc> {
             ),
             SizedBox(
               width: 300,
-              height: 500,
+              height: 600,
               child: GridView.builder(
                 itemCount: buttonsIcons.length,
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -196,17 +226,22 @@ class CalcButtons extends State<StateFulCalc> {
                 ),
                 itemBuilder: (BuildContext context, int index) {
                   return GridTile(
-                    child: ElevatedButton(
-                      onPressed: () {
-                        onButtonPressed(index);
-                      },
-                      style: ElevatedButton.styleFrom(
-                        shape: const CircleBorder(),
-                        backgroundColor: Colors.blueGrey,
-                      ),
-                      child: Text(
-                        '${buttonsIcons[index]}',
-                        style: TextStyle(color: Colors.white, fontSize: 30),
+                    child: Padding(
+                      padding: EdgeInsetsGeometry.all(8),
+                      child: ElevatedButton(
+                        onPressed: () {
+                          onButtonPressed(index);
+                        },
+                        style: ElevatedButton.styleFrom(
+                          shape: const CircleBorder(),
+                          backgroundColor: Colors.blueGrey,
+                        ),
+                        child: Center(
+                          child: Text(
+                            buttonsIcons[index],
+                            style: TextStyle(color: Colors.white, fontSize: 30),
+                          ),
+                        ),
                       ),
                     ),
                   );
