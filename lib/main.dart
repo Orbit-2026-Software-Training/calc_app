@@ -1,5 +1,3 @@
-// ignore_for_file: avoid_print
-
 import 'package:flutter/material.dart';
 
 void main() {
@@ -77,26 +75,20 @@ class CalcButtons extends State<StateFulCalc> {
         stringNum = "";
         dataHistory.add(buttonsIcons[whichButton]);
       }
-      if (whichButton == 4) {
-        print(numbers);
+      if(whichButton == 4) {
+        if (numbers.isNotEmpty) {
+          numbers.removeLast();
+          
         
-        if(numbers.length<=1){
-          numbers.clear();
-          intNumbers.clear();
-          operations.clear();
-          stringNum = "";
+        if (stringNum.isNotEmpty) {
+          
+          stringNum = stringNum.substring(0, stringNum.length - 1);
+        } else if (operations.isNotEmpty) {
+          operations.removeLast();
+    
         }
-        for(int i=0; i<9;i++){
-          if (numbers.last==i.toString()){
-            print("x");
-            numbers.removeLast();
-            intNumbers.removeLast();
-            stringNum="";
-            
-            
-      }
-      }
-
+        }
+    
       }
       if (whichButton == 6) {
         numbers.clear();
