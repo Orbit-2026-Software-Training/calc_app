@@ -45,14 +45,14 @@ class CalcButtons extends State<StateFulCalc> {
     "8",
     "9",
   ];
-  List<String> numbers = [];
+  List<String> view = [];
   List<num> intNumbers = [];
   List<String> operations = [];
   String stringNum = "";
-  num result = 0;
-  List<String> history = [];
+  num calculation = 0;
+  List<String> historyResult = [];
   List<num> results = [];
-  List<String> dataHistory = [];
+  List<String> dataHistory= [];
   String historyData = "";
   String calcWay = "";
   List<String> result1 = [];
@@ -60,13 +60,13 @@ class CalcButtons extends State<StateFulCalc> {
   void onButtonPressed(int whichButton) {
     setState(() {
       if (whichButton >= 7) {
-        numbers.add(buttonsIcons[whichButton]);
+        view.add(buttonsIcons[whichButton]);
         stringNum = stringNum + buttonsIcons[whichButton];
       }
       if (whichButton <= 3) {
-        numbers.add(buttonsIcons[whichButton]);
+        view.add(buttonsIcons[whichButton]);
         intNumbers.add(num.parse(stringNum));
-        if (numbers[0] == buttonsIcons[1]) {
+        if (view[0] == buttonsIcons[1]) {
           intNumbers[0] = intNumbers[0] * -1;
           stringNum = "-$stringNum";
         }
@@ -75,45 +75,49 @@ class CalcButtons extends State<StateFulCalc> {
         stringNum = "";
         dataHistory.add(buttonsIcons[whichButton]);
       }
-      if(whichButton == 4) {
-        if (numbers.isNotEmpty) {
-          numbers.removeLast();
+      if (whichButton == 4) {
+        if (view.isNotEmpty) {
+          if(view.length==1){
+            operations.clear();
+            stringNum="";
+            intNumbers.clear();
+            
+          }
           
-        
-        if (stringNum.isNotEmpty) {
-          
-          stringNum = stringNum.substring(0, stringNum.length - 1);
-        } else if (operations.isNotEmpty) {
-          operations.removeLast();
-    
+          if (stringNum.isNotEmpty && ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.'].contains(view.last)) {
+            stringNum = stringNum.substring(0, stringNum.length - 1);
+          } else if (operations.isNotEmpty && ["+", "-", "*", "÷"].contains(view.last)) {
+            operations.removeLast();
+            stringNum = intNumbers.last.toString();
+            intNumbers.removeLast();
+          }
+          view.removeLast();
         }
-        }
-    
       }
       if (whichButton == 6) {
-        numbers.clear();
+        view.clear();
         intNumbers.clear();
         operations.clear();
         stringNum = "";
       }
       if (whichButton == 5) {
-        historyData = numbers.join();
+        historyData = view.join();
         intNumbers.add(num.parse(stringNum));
         dataHistory.add(stringNum);
         if (operations.contains("÷") || operations.contains("*")) {
           for (int i = 0; i < operations.length; i++) {
             if (operations[i] == "÷") {
-              result = intNumbers[i] / intNumbers[i + 1];
-              results.add(result);
-              intNumbers[i] = result;
+              calculation = intNumbers[i] / intNumbers[i + 1];
+              results.add(calculation);
+              intNumbers[i] = calculation;
               intNumbers.removeAt(i + 1);
               operations.removeAt(i);
               i--;
             }
             if (operations[i] == "*") {
-              result = intNumbers[i] * intNumbers[i + 1];
-              results.add(result);
-              intNumbers[i] = result;
+              calculation = intNumbers[i] * intNumbers[i + 1];
+              results.add(calculation);
+              intNumbers[i] = calculation;
               intNumbers.removeAt(i + 1);
               operations.removeAt(i);
               i--;
@@ -123,39 +127,39 @@ class CalcButtons extends State<StateFulCalc> {
         }
         for (int i = 0; i < operations.length; i++) {
           if (operations[i] == "+") {
-            result = intNumbers[i] + intNumbers[i + 1];
-            results.add(result);
-            intNumbers[i] = result;
+            calculation = intNumbers[i] + intNumbers[i + 1];
+            results.add(calculation);
+            intNumbers[i] = calculation;
             intNumbers.removeAt(i + 1);
             operations.removeAt(i);
             i--;
           }
           if (operations[i] == "-") {
-            result = intNumbers[i] - intNumbers[i + 1];
-            results.add(result);
-            intNumbers[i] = result;
+            calculation = intNumbers[i] - intNumbers[i + 1];
+            results.add(calculation);
+            intNumbers[i] = calculation;
             intNumbers.removeAt(i + 1);
             operations.removeAt(i);
             i--;
           }
         }
 
-        numbers.clear();
-        numbers.add(results.last.toString());
-        if (numbers[0] == "Infinity") {
-          numbers = ["error"];
-          history.add(numbers.join());
+        view.clear();
+        view.add(results.last.toString());
+        if (view[0] == "Infinity") {
+          view = ["error"];
+          historyResult.add(view.join());
         } else {
-          history.add(numbers.join());
+          historyResult.add(view.join());
         }
-        result1.add("$historyData=${history[0]}");
+        result1.add("$historyData=${historyResult[0]}");
         dataHistory.clear();
 
         
         intNumbers.clear();
         operations.clear();
-        stringNum =history[0];
-        history.clear();
+        stringNum =historyResult[0];
+        historyResult.clear();
       
       }
 
@@ -203,7 +207,7 @@ class CalcButtons extends State<StateFulCalc> {
             Padding(
               padding: EdgeInsetsGeometry.fromLTRB(0, 20, 0, 50),
               child: Text(
-                numbers.join(),
+                view.join(),
                 textDirection: TextDirection.ltr,
                 style: TextStyle(fontSize: 30, color: Colors.white),
               ),
