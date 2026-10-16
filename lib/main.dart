@@ -52,11 +52,9 @@ class CalcButtons extends State<StateFulCalc> {
   num calculation = 0;
   List<String> historyResult = [];
   List<num> results = [];
-  List<String> dataHistory= [];
-  String historyData = "";
-  String calcWay = "";
-  List<String> result1 = [];
-
+  List<String> historyData= [];
+  String historyCalculation = "";
+  List<String> history= [];
   void onButtonPressed(int whichButton) {
     setState(() {
       if (whichButton >= 7) {
@@ -71,9 +69,9 @@ class CalcButtons extends State<StateFulCalc> {
           stringNum = "-$stringNum";
         }
         operations.add(buttonsIcons[whichButton]);
-        dataHistory.add(stringNum);
+        historyData.add(stringNum);
         stringNum = "";
-        dataHistory.add(buttonsIcons[whichButton]);
+        historyData.add(buttonsIcons[whichButton]);
       }
       if (whichButton == 4) {
         if (view.isNotEmpty) {
@@ -101,9 +99,9 @@ class CalcButtons extends State<StateFulCalc> {
         stringNum = "";
       }
       if (whichButton == 5) {
-        historyData = view.join();
+        historyCalculation = view.join();
         intNumbers.add(num.parse(stringNum));
-        dataHistory.add(stringNum);
+        historyData.add(stringNum);
         if (operations.contains("÷") || operations.contains("*")) {
           for (int i = 0; i < operations.length; i++) {
             if (operations[i] == "÷") {
@@ -152,8 +150,8 @@ class CalcButtons extends State<StateFulCalc> {
         } else {
           historyResult.add(view.join());
         }
-        result1.add("$historyData=${historyResult[0]}");
-        dataHistory.clear();
+        history.add("$historyCalculation=${historyResult[0]}");
+        historyData.clear();
 
         
         intNumbers.clear();
@@ -168,7 +166,7 @@ class CalcButtons extends State<StateFulCalc> {
 
   void historyDelete() {
     setState(() {
-      result1.clear();
+      history.clear();
     });
   }
 
@@ -181,11 +179,11 @@ class CalcButtons extends State<StateFulCalc> {
           children: [
             Flexible(
               child: ListView.builder(
-                itemCount: result1.length,
+                itemCount: history.length,
                 itemBuilder: (BuildContext context, int index) {
                   return ListTile(
                     title: Text(
-                      result1[index],
+                      history[index],
                       textDirection: TextDirection.ltr,
                     ),
                   );
